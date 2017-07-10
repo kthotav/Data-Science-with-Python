@@ -64,6 +64,5 @@ airlines = [row[0].translate(None, '*') for row in data]
 airlines_1 = [1 if '*' in row[0] else 0 for row in data]
 
 
-# Create a dictionary in which the key is the airline name (without the star)
-   and the value is the average number of incidents. 
+# Create a dictionary in which the key is the airline name (without the star) and the value is the average number of incidents. 
 airline_incidents = dict(zip(airlines, incidents))
