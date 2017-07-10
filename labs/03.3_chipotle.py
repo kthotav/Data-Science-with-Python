@@ -63,3 +63,15 @@ dchips = defaultdict(int)
 for row in data:
     if row[2] in chips:
         dchips[row[2]] += int(row[1])
+
+
+'''
+create a dictionary in which key is the order id and value is the total price. Find the most expensive order
+'''
+
+dorders = defaultdict(int)
+for row in data:
+    dorders[row[0]] += float(row[4].translate(None, '$'))
+
+max(dorders, key=dorders.get) # order 926: $205.25
+
