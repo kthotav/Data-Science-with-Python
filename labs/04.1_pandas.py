@@ -50,3 +50,92 @@ users.age.mean() # get mean of age column
 users.gender.value_counts() # useful for categorial variables M/F
 users.age.value_counts() # useful for categorial numerical variables
 
+
+'''
+EXERCISE ONE
+'''
+
+# read drinks table 
+drinks = pd.read_table('../data/drinks.csv', sep=',')
+drinks = pd.read_csv('../data/drinks.csv')
+
+# drinks head, tail data
+drinks.head()
+drinks.tail() 
+
+# drinks data info
+drinks.index
+drinks.dtypes 
+drinks.shape 
+
+drinks['beer_servings']
+drinks.beer_servings
+
+# drinks data info with describe 
+drinks.describe()
+drinks.beer_servings.describe()
+drinks.beer_servings.mean()
+
+# count continent occurences
+drinks.continent.value_counts()
+
+
+'''
+Filtering and Sorting
+'''
+
+# filter users less than 20 yrs of age
+users[users.age < 20]
+users[users.age < 20].occupation
+users[users.age < 20].occupation.value_counts()
+
+# filter with multiple condition 
+users[(users.age < 20) & (users.gender == 'M')]
+users[(users.age < 20) | (users.age > 60)]
+users[users.occupation.isin(['doctor', 'lawyer'])] 
+
+# sorting
+users.age.sort_values () # sorts age column
+users.sort_values(by='age') # sorts age column
+users.sort_values(by='age', ascending=False) # use descending
+users.sort_values(['occupation', 'age']) # sort by multiple columns
+
+
+
+'''
+EXERCISE TWO
+'''
+
+# filter DF to only include EU countries
+drinks[drinks.continent == 'EU']
+
+# filter DF to EU contries with wine servings > 30
+drinks[(drinks.continent == 'EU') & (drinks.wine_servings > 300)]
+
+# calcualte the average 'beer_servings for all EU
+drinks[drinks.continent == 'EU'].beer_servings.mean()
+
+# determine which 10 countries have highst total_liters_of_pure_alcohol
+drinks.sort_values(by = 'total_litres_of_pure_alcohol').tail(10)
+
+'''
+Renaming, Adding, and Removing Columns 
+'''
+
+# renaming one or more columns 
+drinks.rename(columns={'beer_servings': 'beer', 'wine_servings': 'wine'})
+drinks.rename(columns={'beer_servings': 'beer', 'wine_servings': 'wine'}, inplace=True)
+
+# replace all column names
+drink_cols = ['country', 'beer', 'spirit', 'wine', 'liters', 'continent']
+drinks = pd.read_csv('../data/drinks.csv', header=0, names=drink_cols)
+drink.columns = drink_cols
+
+# add a new column as a function of existing columns
+drinks['servings'] = drinks.beer + drinks.spirit + drinks.wine
+drinks['mL'] = drinks.liters * 1000
+
+# removing columns
+drinks.drop['mL', axis=1]
+drinks.drop(['mL', 'servings'], axis=1)
+drinks.drop(['mL', 'servings'], axis=1, inplace=True)   # make it permanent
