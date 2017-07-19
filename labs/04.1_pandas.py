@@ -129,13 +129,52 @@ drinks.rename(columns={'beer_servings': 'beer', 'wine_servings': 'wine'}, inplac
 # replace all column names
 drink_cols = ['country', 'beer', 'spirit', 'wine', 'liters', 'continent']
 drinks = pd.read_csv('../data/drinks.csv', header=0, names=drink_cols)
-drink.columns = drink_cols
+drinks.columns = drink_cols
 
 # add a new column as a function of existing columns
 drinks['servings'] = drinks.beer + drinks.spirit + drinks.wine
 drinks['mL'] = drinks.liters * 1000
 
 # removing columns
-drinks.drop['mL', axis=1]
+drinks.drop('mL', axis=1)
 drinks.drop(['mL', 'servings'], axis=1)
 drinks.drop(['mL', 'servings'], axis=1, inplace=True)   # make it permanent
+
+'''
+Handling Missing Values 
+'''
+
+drinks.continent.value_counts() # excludes missing values
+drinks.continent.value_counts(dropna=False) # includes missing values
+
+# finding missing values in a Series
+drinks.continent.isnull() # True if missing, False if not missing
+drinks.continent.isnull() # count the missing values
+drinks.continent.notnull() # True if not missing, False if missing
+drinks[drinks.continent.notnull()] # only shows rows where continent is not missing
+
+# understandin axis
+drinks.sum(axis = 0) # sums down the 0 axis, rows
+drinks.sum() # axis is 0 by default 
+drinks.sum(axis = 1) # sums across the 1 axis, columns
+
+# find missing values in DF
+drinks.isnull()
+drinks.isnull().sum() # count missing values in each column
+
+# drop missing values 
+drinks.dropna() # drop a row if ANY values are missing
+drinks.dropna(how="all") # drop only if ALL values are missing
+
+# fill in missing values
+drinks.continent.fillna(value='NA') # fill missing value with NA
+drinks.continent.fillna(value='NA', inplace=True) # modifies 'drinks' in place
+
+# turn of missing value filter 
+drinks = pd.read_csv('../data/drinks.csv', header=0, names=drink_cols, na_filter=False)
+
+
+'''
+EXCERISE THREE
+'''
+
