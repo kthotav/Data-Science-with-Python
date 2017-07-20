@@ -178,3 +178,28 @@ drinks = pd.read_csv('../data/drinks.csv', header=0, names=drink_cols, na_filter
 EXCERISE THREE
 '''
 
+# read ufo.csv
+ufo = pd.read_csv('../data/ufo.csv')
+
+# check shape of ufo data
+ufo.shape
+
+# most common colors 
+ufo['Colors Reported'].value_counts()[:3]
+ufo['Colors Reported'].value_counts().head(3)
+
+# rename any columns with spaces so that they don't contain spaces
+ufo.rename(columns={'Colors Reported':'Colors_Reported', 'Shape Reported':'Shape_Reported'}, inplace=True)
+ufo.columns = [col.replace(' ', '_') for col in ufo.columns]
+
+# find most common city of reports in VA
+ufo[ufo.State == 'VA'].City.value_counts().head(1)
+
+# print a DataFrame containing only reports from Arlington, VA
+ufo[(ufo.City=='Arlington') & (ufo.State=='VA')]
+
+# missing values in each column
+ufo.isnull().sum()
+
+# how many rows remain if we drop all rows with NaN
+ufo.dropna().shape[0]
