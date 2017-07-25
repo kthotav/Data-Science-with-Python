@@ -203,3 +203,41 @@ ufo.isnull().sum()
 
 # how many rows remain if we drop all rows with NaN
 ufo.dropna().shape[0]
+
+'''
+Split-Apply-Combine
+'''
+
+# for each continent, calculate the mean beer servings
+drinks.groupby('continent').beer.mean()
+
+# for each continent, calculate the mean of all numeric columns
+drinks.groupby('continent').mean()
+
+# for each continent, describe beer servings
+drinks.groupby('continent').beer.describe()
+
+drinks.groupby('continent').beer.agg(['count', 'mean', 'min', 'max'])
+drinks.groupby('continent').beer.agg(['count', 'mean', 'min', 'max']).sort_values(by='mean')
+
+drinks.groupby('continent').describe()
+
+# count number of occurrences of continent
+drinks.groupby('continent').continent.count()
+drinks.continent.value_counts()
+
+
+'''
+EXCERCISE FOUR
+'''
+# for each occupation in 'users', count the number of occurrences
+users.occupation.value_counts()
+
+# for each occupation, calculate the mean age
+users.groupby('occupation').age.mean()
+
+# for each occupation, calculate min and max age
+users.groupby('occupation').age.agg(['min', 'max'])
+
+# for each combination of occupation and gender, calculate the mean age
+users.groupby(['occupation', 'gender']).age.mean()
