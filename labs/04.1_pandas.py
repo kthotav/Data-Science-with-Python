@@ -241,3 +241,48 @@ users.groupby('occupation').age.agg(['min', 'max'])
 
 # for each combination of occupation and gender, calculate the mean age
 users.groupby(['occupation', 'gender']).age.mean()
+
+
+'''
+Selecting Multiple Columns and Flitering Rows
+'''
+
+
+# select multiple colunms 
+my_cols = ['City', 'State']
+ufo[my_cols]
+ufo[['City', 'State']]
+
+# use loc to select columns by name 
+ufo.loc[:, 'City']
+ufo.loc[:, ['City', 'State']]
+ufo.loc[:, 'City':'State']
+
+# loc can also filter rows
+ufo.loc[0, :]
+ufo.loc[0:2, :]
+ufo.loc[0:2, 'City': 'State']
+
+# use iloc to filter rows and select columns by integer position
+ufo.iloc[:, [0,3]]
+ufo.iloc[:, 0:4]
+ufo.iloc[0:3, :]
+
+
+'''
+Merging DataFrames
+'''
+
+# read 'u.item' 
+movie_cols = ['movie_id', 'title']
+movies = pd.read_table('../data/u.item.txt', sep='|', header=None, names=movie_cols, usecols=[0,1])
+
+# read u.data 
+ratiing_cols = ['user.id', 'movie_id', 'rating', 'timestamp']
+ratings = pd.read_table('../data/u.data.txt', sep='\t', header=None, names=ratiing_cols )
+
+# merge movies and ratings data (inner join)
+movie_ratings = pd.merge(movies, ratings)
+movies.shape
+ratings.shape
+movie_ratings.shape
