@@ -286,3 +286,93 @@ movie_ratings = pd.merge(movies, ratings)
 movies.shape
 ratings.shape
 movie_ratings.shape
+
+'''
+Other Commonly Used Features
+'''
+
+# map existing values to a different set of values
+users['is_male'] = users.gender.map({'F':0, 'M':1})
+
+# replace all instances of a value in a column (must match entire value)
+ufo.State.replace('Fl', 'FL', inplace=True)
+
+# string methods are accessed via 'str'
+ufo.State.str.upper()                               # converts to uppercase
+ufo.Colors_Reported.str.contains('RED', na='False') # checks for a substring
+
+# convert a string to the datetime format
+ufo['Time'] = pd.to_datetime(ufo.Time)
+ufo.Time.dt.hour                        # datetime format exposes convenient attributes
+(ufo.Time.max() - ufo.Time.min()).days  # also allows you to do datetime "math"
+
+# setting and then removing an index
+ufo.set_index('Time', inplace=True)
+ufo.reset_index(inplace=True)
+
+# change the data type of a column
+drinks['beer'] = drinks.beer.astype('float')
+
+# create dummy variables for 'continent' and exclude first dummy column
+continent_dummies = pd.get_dummies(drinks.continent, prefix='cont').iloc[:, 1:]
+
+# concatenate two DataFrames (axis=0 for rows, axis=1 for columns)
+drinks = pd.concat([drinks, continent_dummies], axis=1)
+
+
+'''
+Other Less Used Features
+'''
+
+# detecting duplicate rows
+users.duplicated()          # True if a row is identical to a previous row
+users.duplicated().sum()    # count of duplicates
+users[users.duplicated()]   # only show duplicates
+users.drop_duplicates()     # drop duplicate rows
+users.age.duplicated()      # check a single column for duplicates
+users.duplicated(['age', 'gender', 'zip_code']).sum()   # specify columns for finding duplicates
+
+# convert a range of values into descriptive groups
+drinks['beer_level'] = 'low'    # initially set all values to 'low'
+drinks.loc[drinks.beer.between(101, 200), 'beer_level'] = 'med'     # change 101-200 to 'med'
+drinks.loc[drinks.beer.between(201, 400), 'beer_level'] = 'high'    # change 201-400 to 'high'
+
+# display a cross-tabulation of two Series
+pd.crosstab(drinks.continent, drinks.beer_level)
+
+# convert 'beer_level' into the 'category' data type
+drinks['beer_level'] = pd.Categorical(drinks.beer_level, categories=['low', 'med', 'high'])
+drinks.sort('beer_level')   # sorts by the categorical ordering (low to high)
+
+# limit which rows are read when reading in a file
+pd.read_csv('drinks.csv', nrows=10)           # only read first 10 rows
+pd.read_csv('drinks.csv', skiprows=[1, 2])    # skip the first two rows of data
+
+# write a DataFrame out to a CSV
+drinks.to_csv('drinks_updated.csv')                 # index is used as first column
+drinks.to_csv('drinks_updated.csv', index=False)    # ignore index
+
+# create a DataFrame from a dictionary
+pd.DataFrame({'capital':['Montgomery', 'Juneau', 'Phoenix'], 'state':['AL', 'AK', 'AZ']})
+
+# create a DataFrame from a list of lists
+pd.DataFrame([['Montgomery', 'AL'], ['Juneau', 'AK'], ['Phoenix', 'AZ']], columns=['capital', 'state'])
+
+# randomly sample a DataFrame
+import numpy as np
+mask = np.random.rand(len(drinks)) < 0.66   # create a Series of booleans
+train = drinks[mask]                        # will contain around 66% of the rows
+test = drinks[~mask]                        # will contain the remaining rows
+
+# change the maximum number of rows and columns printed ('None' means unlimited)
+pd.set_option('max_rows', None)     # default is 60 rows
+pd.set_option('max_columns', None)  # default is 20 columns
+print drinks
+
+# reset options to defaults
+pd.reset_option('max_rows')
+pd.reset_option('max_columns')
+
+# change the options temporarily (settings are restored when you exit the 'with' block)
+with pd.option_context('max_rows', None, 'max_columns', None):
+    print drinks
